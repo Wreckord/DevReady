@@ -1,4 +1,4 @@
-import { read_calls } from "../access data/data_read_write.js";
+import { read_calls, write_calls } from "../access data/data_read_write.js";
 import { getCallById,archiveCall } from "../basic services/call_service.js";
 import { unarchiveCall } from "../advanced services/advanced_call_service.js";
 import express from 'express';
@@ -35,6 +35,17 @@ app.patch('/calls/:callId/archive', async (req,res)=>{
     if (call===null){
         return res.status(404).send({message: 'Call Not Found'});
     }
+    let calls=await read_calls();
+    if(calls[0]===undefined){
+        return res.status(500).send({message: "Server Error: Calls can't be read"});
+    }
+    for(let i=0; i<calls.length; i++){
+        if(calls[i]['id']===callId){
+            calls[i]=call;
+            break;
+        }
+    }
+    await write_calls(calls);
     res.status(200).send(call);
 })
 
@@ -45,5 +56,16 @@ app.patch('/calls/:callId/unarchive', async (req,res)=>{
     if (call===null){
         return res.status(404).send({message: 'Call Not Found'});
     }
+    let calls=await read_calls();
+    if(calls[0]===undefined){
+        return res.status(500).send({message: "Server Error: Calls can't be read"});
+    }
+    for(let i=0; i<calls.length; i++){
+        if(calls[i]['id']===callId){
+            calls[i]=call;
+            break;
+        }
+    }
+    await write_calls(calls);
     res.status(200).send(call);
 })

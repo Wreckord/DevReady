@@ -8,6 +8,6 @@ Features:
     -Get a certain Call by ID using GET
     -Archive a Non Archived Call and vice versa using PATCH
   Advanced:
-    TBA
+    -Saved changes to archive status in the data.json file
 
 Running the "index.js" file initiates the server. Test case code can be found on /api endpoints/api_endpoints.js
