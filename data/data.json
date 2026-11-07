@@ -21,7 +21,7 @@
     },
     {
         "id": "3",
-        "direction": "outbound",
+        "direction": "inbound",
         "from": "+33 7 55 44 33 22",
         "to": "+33 1 23 45 67 89",
         "call_type": "voicemail",
@@ -48,10 +48,6 @@
             {
                 "id": "note-1",
                 "content": "Customer was extremely rude. Caution advised."
-            },
-            {
-                "id": "note-2",
-                "content": "Call was full of static. Haunted line is a plausible explanation"
             }
         ]
     },
@@ -73,13 +69,7 @@
         "call_type": "missed",
         "duration": 0,
         "is_archived": false,
-        "created_at": "2025-04-11T11:30:00Z",
-        "notes": [
-            {
-                "id": "note-1",
-                "content": "Person is extremely rude. Caution advised"
-            }
-        ]
+        "created_at": "2025-04-11T11:30:00Z"
     },
     {
         "id": "7",
@@ -118,7 +108,7 @@
         "to": "+33 1 23 45 67 89",
         "call_type": "rejected",
         "duration": 0,
-        "is_archived": true,
+        "is_archived": false,
         "created_at": "2025-04-14T07:55:00Z"
     },
     {
@@ -128,8 +118,18 @@
         "to": "+33 6 77 88 99 00",
         "call_type": "answered",
         "duration": 145,
-        "is_archived": false,
+        "is_archived": true,
         "created_at": "2025-04-14T16:10:00Z"
+    },
+    {
+        "id": "12",
+        "direction": "inbound",
+        "from": "+33 7 65 43 21 09",
+        "to": "+33 1 23 45 67 89",
+        "call_type": "missed",
+        "duration": 0,
+        "is_archived": false,
+        "created_at": "2025-04-15T12:25:00Z"
     },
     {
         "id": "13",
@@ -140,5 +140,5 @@
         "duration": 180,
         "is_archived": false,
         "created_at": "2025-04-16T18:40:00Z"
-    }
+    }    
 ]
