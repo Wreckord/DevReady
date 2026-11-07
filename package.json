@@ -1,0 +1,24 @@
+{
+  "name": "week-2",
+  "version": "1.0.0",
+  "description": "This is a project that receives a JSON file with calls and performs actions on it.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Wreckord/DevReady.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/Wreckord/DevReady/issues"
+  },
+  "homepage": "https://github.com/Wreckord/DevReady#readme",
+  "dependencies": {
+    "express": "^5.3.0"
+  }
+}
