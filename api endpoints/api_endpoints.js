@@ -1,9 +1,7 @@
-import { read_calls } from "../access data/data_read_write.js";
+import { read_calls, write_calls } from "../access data/data_read_write.js";
 import { getCallById,archiveCall } from "../basic services/call_service.js";
 import { unarchiveCall } from "../advanced services/advanced_call_service.js";
 import express from 'express';
-
-let calls=await read_calls();
 
 export const app=express();
 export const PORT=8000;
@@ -12,7 +10,11 @@ export const PORT=8000;
 app.use(express.json());
 
 //Getting All Calls
-app.get('/calls', (req,res)=>{
+app.get('/calls', async (req,res)=>{
+    let calls=await read_calls();
+    if(calls[0]===undefined){
+        return res.status(500).send({message: "Server Error: Calls can't be read"});
+    }
     res.status(200).send(calls);
 });
 
@@ -20,6 +22,9 @@ app.get('/calls', (req,res)=>{
 app.get('/calls/:callId', async (req,res)=>{
     const callId=req.params.callId;
     let call=await getCallById(callId);
+    if(call===null){
+        return res.status(404).send({message: 'Call not found'});
+    }
     res.status(200).send(call);
 })
 
@@ -30,6 +35,17 @@ app.patch('/calls/:callId/archive', async (req,res)=>{
     if (call===null){
         return res.status(404).send({message: 'Call Not Found'});
     }
+    let calls=await read_calls();
+    if(calls[0]===undefined){
+        return res.status(500).send({message: "Server Error: Calls can't be read"});
+    }
+    for(let i=0; i<calls.length; i++){
+        if(calls[i]['id']===callId){
+            calls[i]=call;
+            break;
+        }
+    }
+    await write_calls(calls);
     res.status(200).send(call);
 })
 
@@ -40,5 +56,16 @@ app.patch('/calls/:callId/unarchive', async (req,res)=>{
     if (call===null){
         return res.status(404).send({message: 'Call Not Found'});
     }
+    let calls=await read_calls();
+    if(calls[0]===undefined){
+        return res.status(500).send({message: "Server Error: Calls can't be read"});
+    }
+    for(let i=0; i<calls.length; i++){
+        if(calls[i]['id']===callId){
+            calls[i]=call;
+            break;
+        }
+    }
+    await write_calls(calls);
     res.status(200).send(call);
 })
