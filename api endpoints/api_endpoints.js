@@ -9,6 +9,14 @@ export const PORT=8000;
 //Middleware to Parse JSON for any Body types that may need to appear
 app.use(express.json());
 
+//Middleware to allow basic Cross-Origin Resourse Sharing (CORS)
+app.use((req,res,next)=>{
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE");
+  res.setHeader("Access-Control-Allow-Headers", "*");
+  next();
+});
+
 //Getting All Calls
 app.get('/calls', async (req,res)=>{
     const queries=req.query;
@@ -27,7 +35,7 @@ app.get('/calls/:callId', async (req,res)=>{
         return res.status(404).send({message: 'Call not found'});
     }
     res.status(200).send(call);
-})
+});
 
 //Archiving a Call
 app.patch('/calls/:callId/archive', async (req,res)=>{
@@ -48,7 +56,7 @@ app.patch('/calls/:callId/archive', async (req,res)=>{
     }
     await write_calls(calls);
     res.status(200).send(call);
-})
+});
 
 //Unarchiving a Call
 app.patch('/calls/:callId/unarchive', async (req,res)=>{
@@ -69,7 +77,7 @@ app.patch('/calls/:callId/unarchive', async (req,res)=>{
     }
     await write_calls(calls);
     res.status(200).send(call);
-})
+});
 
 //Writing a Note
 app.post('/calls/:callId/notes', async(req,res)=>{
@@ -92,7 +100,7 @@ app.post('/calls/:callId/notes', async(req,res)=>{
     }
     await write_calls(calls);
     res.status(200).send(addedCall);     
-})
+});
 
 //Delete a Call
 app.delete('/calls/:callId', async (req,res)=>{
@@ -103,4 +111,15 @@ app.delete('/calls/:callId', async (req,res)=>{
     }
     await write_calls(calls);
     res.status(200).send(calls);
-})
+});
+
+//Health Check Endpoint
+app.get('/health', async (req,res)=>{
+    const uptime=process.uptime();
+    try{
+        res.status(200).send({message: `Process Running Time: ${uptime} seconds`});
+    }catch(err){
+        res.status(503).send({message: err});
+    }
+});
+

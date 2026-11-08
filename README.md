@@ -12,5 +12,8 @@ Features:
     -Add Notes to Calls
     -Delete Calls from the JSON file
     -Filter Calls with GET
+    -Configure CORS
+    -Health Check Endpoint
 
 Running the "index.js" file initiates the server. Test case code can be found on /api endpoints/api_endpoints.js
+Database is not implemented yet, but will soon be...
