@@ -57,5 +57,8 @@ export function addNote(call, content) {
 //Delete a call
 export async function deleteCall(call_id) {
     let calls=await read_calls();
+    if(calls[0]===undefined){
+        return null;
+    }
     return calls.filter((call)=>call['id']!==String(call_id));
 }

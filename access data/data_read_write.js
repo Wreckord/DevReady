@@ -1,10 +1,15 @@
 import fs from 'node:fs/promises';
 //Read and Write functions for the JSON file
 
-export async function read_calls() {
+export async function read_calls(property, value) {
     try{
         const datastream=await fs.readFile('./data/data.json');
-        return JSON.parse(datastream);
+        const parsedData=JSON.parse(datastream);
+        if((property===null)||(value===null)){
+            return parsedData;
+        }else{
+            return parsedData.filter((call)=>call[property]===value);
+        }
     }catch(err){
         return err;
     }

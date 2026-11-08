@@ -8,6 +8,9 @@ Features:
     -Get a certain Call by ID using GET
     -Archive a Non Archived Call and vice versa using PATCH
   Advanced:
-    -Saved changes to archive status in the data.json file
+    -Save changes to archive status in the data.json file
+    -Add Notes to Calls
+    -Delete Calls from the JSON file
+    -Filter Calls with GET
 
 Running the "index.js" file initiates the server. Test case code can be found on /api endpoints/api_endpoints.js
