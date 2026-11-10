@@ -6,6 +6,17 @@ import express from 'express';
 export const app=express();
 export const PORT=8000;
 
+//Call Update helper function
+function updateCall(calls,call,callId){
+    for(let i=0; i<calls.length; i++){
+        if(calls[i].id===callId){
+            calls[i]=call;
+            break;
+        }
+    }
+    return calls    
+}
+
 //Middleware to Parse JSON for any Body types that may need to appear
 app.use(express.json());
 
@@ -21,7 +32,7 @@ app.use((req,res,next)=>{
 app.get('/calls', async (req,res)=>{
     const queries=req.query;
     let calls=await read_calls(Object.keys(queries)[0],Object.values(queries)[0]);
-    if(calls[0]===undefined){
+    if(calls===null){
         return res.status(500).send({message: "Server Error: Calls can't be read"});
     }
     res.status(200).send(calls);
@@ -34,72 +45,75 @@ app.get('/calls/:callId', async (req,res)=>{
     if(call===null){
         return res.status(404).send({message: 'Call not found'});
     }
+    if(call===-1){
+        return res.status(500).send({message: "Server Error: Calls can't be read"});
+    }
     res.status(200).send(call);
 });
 
 //Archiving a Call
 app.patch('/calls/:callId/archive', async (req,res)=>{
     const callId=req.params.callId;
+    let calls=await read_calls();
+    if(calls===null){
+        return res.status(500).send({message: "Server Error: Calls can't be read"});
+    }
     let call=await archiveCall(callId);
     if (call===null){
         return res.status(404).send({message: 'Call Not Found'});
     }
-    let calls=await read_calls();
-    if(calls[0]===undefined){
-        return res.status(500).send({message: "Server Error: Calls can't be read"});
+    calls=updateCall(calls,call,callId);
+    let update=await write_calls(calls);
+    if(update===1){
+        res.status(200).send(call);
+    }else{
+        return res.status(500).send({message: "Server Error: Calls can't be updated"});
     }
-    for(let i=0; i<calls.length; i++){
-        if(calls[i]['id']===callId){
-            calls[i]=call;
-            break;
-        }
-    }
-    await write_calls(calls);
-    res.status(200).send(call);
 });
 
 //Unarchiving a Call
 app.patch('/calls/:callId/unarchive', async (req,res)=>{
     const callId=req.params.callId;
+    let calls=await read_calls();
+    if(calls===null){
+        return res.status(500).send({message: "Server Error: Calls can't be read"});
+    }
     let call=await unarchiveCall(callId);
     if (call===null){
         return res.status(404).send({message: 'Call Not Found'});
     }
-    let calls=await read_calls();
-    if(calls[0]===undefined){
-        return res.status(500).send({message: "Server Error: Calls can't be read"});
+    calls=updateCall(calls,call,callId);
+    let update=await write_calls(calls);
+    if(update===1){
+        res.status(200).send(call);
+    }else{
+        return res.status(500).send({message: "Server Error: Calls can't be updated"});
     }
-    for(let i=0; i<calls.length; i++){
-        if(calls[i]['id']===callId){
-            calls[i]=call;
-            break;
-        }
-    }
-    await write_calls(calls);
-    res.status(200).send(call);
 });
 
 //Writing a Note
 app.post('/calls/:callId/notes', async(req,res)=>{
     const callId=req.params.callId;
+    let calls=await read_calls();
+    if(calls===null){
+        return res.status(500).send({message: "Server Error: Calls can't be read"});
+    }
     let call=await getCallById(callId);
     if(call===null){
         return res.status(404).send({message: 'Call not found'});
     }
     const content=req.body.content;
     let addedCall=addNote(call,content);
-    let calls=await read_calls();
-    if(calls[0]===undefined){
-        return res.status(500).send({message: "Server Error: Calls can't be read"});
+    if(addedCall===null){
+        return res.status(400).send({message: 'Note must be existent and a Non-Empty String'});
     }
-    for(let i=0; i<calls.length; i++){
-        if(calls[i]['id']===callId){
-            calls[i]=addedCall;
-            break;
-        }
-    }
-    await write_calls(calls);
-    res.status(200).send(addedCall);     
+    calls=updateCall(calls,call,callId);
+    let update=await write_calls(calls);
+    if(update===1){
+        res.status(200).send(addedCall);
+    }else{
+        return res.status(500).send({message: "Server Error: Calls can't be updated"});
+    }    
 });
 
 //Delete a Call
@@ -109,8 +123,12 @@ app.delete('/calls/:callId', async (req,res)=>{
     if(calls===null){
         return res.status(500).send({message: "Server Error: Calls can't be read"});
     }
-    await write_calls(calls);
-    res.status(200).send(calls);
+    let update=await write_calls(calls);
+    if(update===1){
+        res.status(200).send(calls);
+    }else{
+        return res.status(500).send({message: "Server Error: Calls can't be updated"});
+    }
 });
 
 //Health Check Endpoint

@@ -140,6 +140,10 @@
             {
                 "id": "note-1",
                 "content": "Disappointed Customer. Lower price on them"
+            },
+            {
+                "id": "note-2",
+                "content": "Discount was not applied. Talk to accounting"
             }
         ]
     },
