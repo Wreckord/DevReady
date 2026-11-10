@@ -8,14 +8,15 @@ export async function getArchivedCalls(){
     try{
         return calls.filter(isArchived);
     }catch(err){
-        return err;
+        console.error(err);
+        return null;
     }
 }
 
 //Unrchive a Call
 export async function unarchiveCall(callId) {
     let call=await getCallById(callId);
-    if(call!==null){
+    if(call!==null && call!==-1){
         call['is_archived']=false;
         return call;
     }else{
@@ -29,26 +30,30 @@ export function updateCall(call, property_name, updated_value){
         call[property_name]=updated_value;
         return call;
     }catch(err){
-        return err;
+        console.error(err);
+        return null;
     }
 }
 
 //Add a new Note
 export function addNote(call, content) {
+    if(!content || typeof(content)!=='string' || content.trim()===''){
+        return null;
+    }
     let notes=[];
     if(call['notes']===undefined){
-        notes[0]={
+        notes.push({
             id: 'note-1',
             content: content
-        };
+        });
         call['notes']=notes;
     }else{
         notes=call['notes'];
-        let last_id=Number(notes[notes.length-1]['id'].substring(5));
-        notes[notes.length]={
+        let last_id=Number(notes[notes.length-1].id.substring(5));
+        notes.push({
             id: 'note-'+String(last_id+1),
             content: content
-        };
+        });
         call['notes']=notes;
     }
     return call;
@@ -57,5 +62,8 @@ export function addNote(call, content) {
 //Delete a call
 export async function deleteCall(call_id) {
     let calls=await read_calls();
+    if(calls===null){
+        return null;
+    }
     return calls.filter((call)=>call['id']!==String(call_id));
 }

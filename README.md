@@ -1,17 +1,19 @@
-This is a project that receives a JSON file with calls and performs actions on it.
+This is a project that tests the API Endpoints created for the calls application. Server listens to PORT 8000 and can be tested on Postman.
 
 Language: JavaScript (Node.js)
 
 Features:
   Basic:
-    -Get all Non Archived Calls
-    -Get a certain Call by ID
-    -Archive a Non Archived Call
+    -Get all Calls with GET
+    -Get a certain Call by ID using GET
+    -Archive a Non Archived Call and vice versa using PATCH
   Advanced:
-    -Unarchive a Call
-    -Change a Call's Properties
-    -Add Notes on any Call
-    -Delete a Call
-    -Write updates on the JSON file
+    -Save changes to archive status in the data.json file
+    -Add Notes to Calls
+    -Delete Calls from the JSON file
+    -Filter Calls with GET
+    -Configure CORS
+    -Health Check Endpoint
 
-While everything seems to work, processes could become more automated in the future, especially when it comes to writing in the JSON file. 
+Running the "index.js" file initiates the server. Test case code can be found on /api endpoints/api_endpoints.js
+Database is not implemented yet, but will soon be...

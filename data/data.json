@@ -69,7 +69,13 @@
         "call_type": "missed",
         "duration": 0,
         "is_archived": false,
-        "created_at": "2025-04-11T11:30:00Z"
+        "created_at": "2025-04-11T11:30:00Z",
+        "notes": [
+            {
+                "id": "note-1",
+                "content": "Call had numerous references to Batman. Keep callers under surveillance"
+            }
+        ]
     },
     {
         "id": "7",
@@ -129,7 +135,17 @@
         "call_type": "missed",
         "duration": 0,
         "is_archived": false,
-        "created_at": "2025-04-15T12:25:00Z"
+        "created_at": "2025-04-15T12:25:00Z",
+        "notes": [
+            {
+                "id": "note-1",
+                "content": "Disappointed Customer. Lower price on them"
+            },
+            {
+                "id": "note-2",
+                "content": "Discount was not applied. Talk to accounting"
+            }
+        ]
     },
     {
         "id": "13",
@@ -140,5 +156,5 @@
         "duration": 180,
         "is_archived": false,
         "created_at": "2025-04-16T18:40:00Z"
-    }    
+    }
 ]
